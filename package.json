@@ -1,0 +1,48 @@
+{
+  "name": "mincho-mara-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.627.0",
+    "@aws-sdk/s3-request-presigner": "^3.627.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@walletconnect/sign-client": "^2.15.1",
+    "@web3auth/base": "^8.12.2",
+    "@web3auth/default-evm-adapter": "^8.12.4",
+    "@web3auth/ethereum-provider": "^8.12.3",
+    "@web3auth/metamask-adapter": "^8.12.4",
+    "@web3auth/modal": "^8.12.3",
+    "axios": "^1.7.3",
+    "ethers": "5.6.4",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.3",
+    "react-select": "^5.8.0",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
+    "clsx": "^2.1.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

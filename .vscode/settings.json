@@ -1,0 +1,92 @@
+{
+  "files.exclude": {
+    "**/.nx": true,
+    "**/.next/": true,
+    "**/node_modules/": true
+  },
+  "search.exclude": {
+    "node_modules/": true,
+    "**/node_modules/": true,
+    "dist/": true,
+    "tmp/": true,
+    "**/.nx": true,
+    "**/.next/": true,
+    "**/*.lock": true
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.activeFocusBorder": "#676767",
+    "activityBar.activeBackground": "#FFFFFF",
+    "activityBar.background": "#333333",
+    "activityBar.foreground": "#676767",
+    "activityBar.inactiveForeground": "#FFFFFF",
+    "editorGroup.border": "#444444",
+    "sash.hoverBorder": "#666666",
+    "sideBar.border": "#676767",
+    "tab.activeBorder": "#000000"
+  },
+  "editor.formatOnSave": true,
+  "prettier.configPath": ".prettierrc",
+  "prettier.printWidth": 120,
+  "prettier.trailingComma": "all",
+  "tailwindCSS.experimental.classRegex": ["clsx\\(([^)]*)\\)", "\"([^\"]*)\""],
+  "tailwindCSS.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/.hg/**",
+    "**/.svn/**",
+    "**/.next/**",
+    "**/tmp/**",
+    "**/.cache/**"
+  ],
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "clsx",
+    "codegen",
+    "commitlint",
+    "deployers",
+    "Figtree",
+    "gitmessage",
+    "nestjs",
+    "Pretendard",
+    "SEPOLIA",
+    "shadcn",
+    "siwe",
+    "tailwindcss",
+    "tanstack",
+    "toastify",
+    "typechain",
+    "typechains",
+    "unveiled",
+    "upsert",
+    "UPSERTED",
+    "wagmi"
+  ],
+  "files.associations": {
+    "*html": "html",
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}
