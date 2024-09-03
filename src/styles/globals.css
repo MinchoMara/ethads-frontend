@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Tailwindcss
+   ========================================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Customizations
+   ========================================================================== */
+
+html,
+body,
+#__next {
+  width: 100%;
+  height: 100%;
+}
+
+img.lazyload:not([src]) {
+  visibility: hidden;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* clears the 'X' from Internet Explorer */
+input.hide-clear[type="search"]::-ms-clear,
+input.hide-clear[type="search"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* clears the 'X' from Chrome */
+input.hide-clear[type="search"]::-webkit-search-decoration,
+input.hide-clear[type="search"]::-webkit-search-cancel-button,
+input.hide-clear[type="search"]::-webkit-search-results-button,
+input.hide-clear[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* clears the 'X' from Internet Explorer */
+input[type="search"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+input[type="search"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* clears the 'X' from Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* 파이어폭스 */
+  appearance: textfield; /* 기타 모든 브라우저 */
+}
+
+.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.gradient-border {
+  background-image: linear-gradient(white, white), linear-gradient(to right, #d02670, #9747ff, #0e61fe);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.custom-shadow {
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.16);
+}
+
+/* custom animations */
+.fade-in-on-hover {
+  @apply opacity-0 transition-opacity duration-500 hover:opacity-100;
+}
+
+iframe {
+  max-width: 100%;
+}
