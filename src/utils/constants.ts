@@ -1,0 +1,2 @@
+export const AD_MANAGER_ADDRESS = process.env.NEXT_PUBLIC_AD_MANAGER_FACTORY_ADDRESS!;
+export const GAS_LIMIT = 1000000;
