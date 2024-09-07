@@ -10,7 +10,7 @@ export interface RegisterAdFormProps {}
 
 export const RegisterAdForm = ({}: RegisterAdFormProps) => {
   /* Contract Interaction */
-  const { registerAds } = useAdManager();
+  const { isProcessing, registerAds } = useAdManager();
 
   /* Form */
   const methods = useForm<CreateAdsInput>({ mode: "onChange", shouldFocusError: true });
@@ -29,11 +29,7 @@ export const RegisterAdForm = ({}: RegisterAdFormProps) => {
   };
 
   const onValid = async () => {
-    try {
-      await registerAds(data);
-    } catch (error) {
-      console.error(error);
-    }
+    await registerAds(data);
   };
 
   const onInvalid = () => {
@@ -148,8 +144,8 @@ export const RegisterAdForm = ({}: RegisterAdFormProps) => {
               />
             </div>
           </div>
-          <Button variant="primary" type="submit" className="w-[200px]" disabled={!isValid}>
-            Register
+          <Button variant="primary" type="submit" className="w-[200px]" disabled={!isValid || isProcessing}>
+            {isProcessing ? "Registering..." : "Register"}
           </Button>
         </div>
       </form>

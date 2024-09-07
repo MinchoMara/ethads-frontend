@@ -1,26 +1,31 @@
 import { AdManager__factory } from "@ethads/contract";
 import { BigNumber, ethers } from "ethers";
+import { useState } from "react";
 import { useWeb3AuthContext } from "~/contexts/Web3AuthProvider";
 import { CreateAdsInput, SupportedNetwork } from "~/types/create-ads.input";
 import { PurchaseAdsInput } from "~/types/purchase-ads.input";
 import { AD_MANAGER_ADDRESS, GAS_LIMIT } from "~/utils/constants";
-import { mapToAdResponse } from "~/utils/mapper";
+import { mapAdResponseArrayToAdListResponse, mapToAdResponse } from "~/utils/mapper";
 
 export const useAdManager = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
   const { getAccounts } = useWeb3AuthContext();
 
   const registerAds = async (createAdsInput: CreateAdsInput) => {
-    const { name, location, adExampleImageUrl, dau, minimumExposure, maximumExposure, price } = createAdsInput;
-    const { ethersProvider, signer } = await getAccounts();
-    if (!ethersProvider || !signer) {
-      throw new Error("Wallet not found");
-    }
-    const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
-    console.log(signer);
-    const ethPrice = ethers.utils.parseEther(price.toString());
+    try {
+      setIsProcessing(true);
 
-    await (
-      await adManager.registerAd(
+      const { name, location, adExampleImageUrl, dau, minimumExposure, maximumExposure, price } = createAdsInput;
+      const { ethersProvider, signer } = await getAccounts();
+      if (!ethersProvider || !signer) {
+        throw new Error("Wallet not found");
+      }
+      const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
+      const ethPrice = ethers.utils.parseEther(price.toString());
+
+      const test = await adManager.owner();
+
+      const tx = await adManager.registerAd(
         adExampleImageUrl,
         name,
         SupportedNetwork.ARBITRUM,
@@ -32,8 +37,13 @@ export const useAdManager = () => {
         dau,
         ethPrice,
         { gasLimit: GAS_LIMIT },
-      )
-    ).wait();
+      );
+      await tx.wait();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const getAllAdsInfo = async () => {
@@ -51,31 +61,38 @@ export const useAdManager = () => {
       }),
     );
 
-    return parsedAdInfos;
+    return mapAdResponseArrayToAdListResponse(parsedAdInfos);
   };
 
-  const registerClient = async (adId: string, purchaseAdInput: PurchaseAdsInput, isOver = false) => {
-    const { companyName, adInfo, adImageUrl, price } = purchaseAdInput;
-    const value = ethers.utils.parseEther(price.toString());
+  const registerClient = async (adId: string, purchaseAdInput: PurchaseAdsInput, occupied = false) => {
+    try {
+      setIsProcessing(true);
+      const { companyName, adInfo, adImageUrl, price } = purchaseAdInput;
+      const value = ethers.utils.parseEther(price.toString());
 
-    const { ethersProvider, signer } = await getAccounts();
-    if (!ethersProvider || !signer) {
-      throw new Error("Wallet not found");
-    }
-    const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
+      const { ethersProvider, signer } = await getAccounts();
+      if (!ethersProvider || !signer) {
+        throw new Error("Wallet not found");
+      }
+      const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
 
-    /* 일반 구매 */
-    if (!isOver) {
+      /* 일반 구매 */
+      if (!occupied) {
+        await (
+          await adManager.registerClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
+        ).wait();
+        return;
+      }
+
+      /* 경매 입찰 */
       await (
-        await adManager.registerClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
+        await adManager.registerOverClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
       ).wait();
-      return;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
-
-    /* 경매 입찰 */
-    await (
-      await adManager.registerOverClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
-    ).wait();
   };
 
   const getClientInfo = async () => {
@@ -107,9 +124,8 @@ export const useAdManager = () => {
     }
 
     const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
-    console.log(adManager);
     await (await adManager.allowAd(adId, clientAddress, { gasLimit: GAS_LIMIT })).wait();
   };
 
-  return { registerAds, getAllAdsInfo, registerClient, getClientInfo, approveAds };
+  return { isProcessing, registerAds, getAllAdsInfo, registerClient, getClientInfo, approveAds };
 };

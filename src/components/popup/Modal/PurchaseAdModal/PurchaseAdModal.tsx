@@ -42,7 +42,7 @@ export const PurchaseAdModal = ({ adId, occupied, minPrice, ...props }: Purchase
 
   const onValid = async () => {
     try {
-      await registerClient(adId, data);
+      await registerClient(adId, data, occupied);
     } catch (error) {
       console.error(error);
     }

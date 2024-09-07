@@ -26,29 +26,33 @@ export const Marketplace = () => {
       }
     }
     fetchData();
-  }, [getAllAdsInfo]);
+  }, []);
 
   return (
     <div className="flex items-start gap-10">
       {/* Ad List */}
-      {groupedAdsInfo && Object.keys(groupedAdsInfo).length > 0 ? (
-        Object.entries(groupedAdsInfo).map(([publisherName, ads]) => (
-          <Ads
-            key={publisherName}
-            publisherName={publisherName}
-            adElementData={ads.map((ad) => ({
-              adId: ad.adId,
-              title: ad.location,
-              maximumExposure: ad.maxDate,
-              occupied: ad.occupied,
-              price: ad.minPrice,
-            }))}
-            selectedId={selectedId}
-            onClickElement={handleSelectElement}
-          />
-        ))
-      ) : (
-        <Skeleton className="h-[535px] w-[504px]" />
+      {groupedAdsInfo && (
+        <div className="flex flex-col items-start gap-10">
+          {Object.keys(groupedAdsInfo).length > 0 ? (
+            Object.entries(groupedAdsInfo).map(([publisherName, ads]) => (
+              <Ads
+                key={publisherName}
+                publisherName={publisherName}
+                adElementData={ads.map((ad) => ({
+                  adId: ad.adId,
+                  title: ad.location,
+                  maximumExposure: ad.maxDate,
+                  occupied: ad.occupied,
+                  price: ad.minPrice,
+                }))}
+                selectedId={selectedId}
+                onClickElement={handleSelectElement}
+              />
+            ))
+          ) : (
+            <Skeleton className="h-[535px] w-[504px]" />
+          )}
+        </div>
       )}
       {/* Ad Details */}
       {selectedId !== "" ? (

@@ -71,6 +71,13 @@ export const mapToAdListResponse = (
   return adListResponse;
 };
 
+export const mapAdResponseArrayToAdListResponse = (adResponseArray: AdResponse[]): AdListResponse => {
+  return adResponseArray.reduce<AdListResponse>((acc, adResponse) => {
+    acc[adResponse.adId] = adResponse;
+    return acc;
+  }, {});
+};
+
 export const mapToAdResponse = (
   adInfo: {
     adId: BigNumber;
