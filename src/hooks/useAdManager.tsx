@@ -4,7 +4,7 @@ import { useWeb3AuthContext } from "~/contexts/Web3AuthProvider";
 import { CreateAdsInput, SupportedNetwork } from "~/types/create-ads.input";
 import { PurchaseAdsInput } from "~/types/purchase-ads.input";
 import { AD_MANAGER_ADDRESS, GAS_LIMIT } from "~/utils/constants";
-import { mapToAdListResponse } from "~/utils/mapper";
+import { mapToAdResponse } from "~/utils/mapper";
 
 export const useAdManager = () => {
   const { getAccounts } = useWeb3AuthContext();
@@ -43,7 +43,15 @@ export const useAdManager = () => {
     }
     const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, ethersProvider);
     const adInfos = await adManager.getAllAdInfo();
-    return mapToAdListResponse(adInfos);
+    const parsedAdInfos = await Promise.all(
+      adInfos.map(async (adInfo) => {
+        const status = await adManager.getAdStatus(adInfo.adId);
+        const occupied = status.adId ? true : false;
+        return mapToAdResponse(adInfo, occupied);
+      }),
+    );
+
+    return parsedAdInfos;
   };
 
   const registerClient = async (adId: string, purchaseAdInput: PurchaseAdsInput, isOver = false) => {

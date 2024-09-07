@@ -2,9 +2,7 @@ import { BigNumber, ethers } from "ethers";
 
 export const mapTimestampToDifference = (unixTimestamp: string) => {
   const currentTime = parseInt((new Date().getTime() / 1000).toString());
-  console.log(currentTime);
   const requestTime = new Date(parseInt(unixTimestamp)).getTime();
-  console.log(requestTime);
 
   const difference = currentTime - requestTime;
   const minute = 60;
@@ -71,6 +69,37 @@ export const mapToAdListResponse = (
   });
 
   return adListResponse;
+};
+
+export const mapToAdResponse = (
+  adInfo: {
+    adId: BigNumber;
+    publisherAddress: string;
+    publisherIpfs: string;
+    publisherProject: string;
+    network: string;
+    location: string;
+    x_size: BigNumber;
+    y_size: BigNumber;
+    mindate: BigNumber;
+    maxdate: BigNumber;
+    dau: BigNumber;
+    minprice: BigNumber;
+  },
+  occupied: boolean,
+): AdResponse => {
+  const { adId, publisherProject, publisherIpfs, location, dau, mindate, maxdate, minprice } = adInfo;
+  return {
+    adId: adId.toString(),
+    protocolName: publisherProject,
+    imageUrl: publisherIpfs,
+    location,
+    dau: dau.toString(),
+    occupied,
+    minDate: mindate.toString(),
+    maxDate: maxdate.toString(),
+    minPrice: ethers.utils.formatEther(minprice),
+  };
 };
 
 export type AdListResponseByProtocolName = Record<string, AdResponse[]>;
