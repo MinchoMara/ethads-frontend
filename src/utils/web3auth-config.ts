@@ -3,7 +3,7 @@ import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 import { Web3Auth, Web3AuthOptions } from "@web3auth/modal";
 
-const clientId = "BOlXuYr5Axh4KEIDZr1j7M0F2UP7Fnza51qIKuN8gjkW24OQzroiCso2MPDjB1uTDaCDIoBhewHG9Z3KuzM-S00"; // get from https://dashboard.web3auth.io
+const clientId = process.env.NEXT_PUBLIC_WEB3_AUTH_CLIENT_ID ?? "";
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
