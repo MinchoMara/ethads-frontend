@@ -8,7 +8,7 @@ const clientId = "BOlXuYr5Axh4KEIDZr1j7M0F2UP7Fnza51qIKuN8gjkW24OQzroiCso2MPDjB1
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
   chainId: "0x66eee",
-  rpcTarget: "https://arbitrum-sepolia.infura.io/v3/9b5ba46b729244938664d766991cedf9",
+  rpcTarget: process.env.NEXT_PUBLIC_RPC_URL ?? "",
   displayName: "Arbitrum Sepolia Testnet",
   blockExplorerUrl: "https://sepolia.arbiscan.io/",
   ticker: "ETH",

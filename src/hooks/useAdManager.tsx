@@ -23,22 +23,21 @@ export const useAdManager = () => {
       const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, signer);
       const ethPrice = ethers.utils.parseEther(price.toString());
 
-      const test = await adManager.owner();
-
-      const tx = await adManager.registerAd(
-        adExampleImageUrl,
-        name,
-        SupportedNetwork.ARBITRUM,
-        location,
-        720,
-        240,
-        minimumExposure,
-        maximumExposure,
-        dau,
-        ethPrice,
-        { gasLimit: GAS_LIMIT },
-      );
-      await tx.wait();
+      await (
+        await adManager.registerAd(
+          adExampleImageUrl,
+          name,
+          SupportedNetwork.ARBITRUM,
+          location,
+          720,
+          240,
+          minimumExposure,
+          maximumExposure,
+          dau,
+          ethPrice,
+          { gasLimit: GAS_LIMIT },
+        )
+      ).wait();
     } catch (error) {
       console.error(error);
     } finally {
@@ -54,9 +53,11 @@ export const useAdManager = () => {
     const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, ethersProvider);
     const adInfos = await adManager.getAllAdInfo();
     const parsedAdInfos = await Promise.all(
-      adInfos.map(async (adInfo) => {
+      adInfos.map(async (adInfo, index) => {
+        console.log(`adInfo ${index}`, adInfo);
         const status = await adManager.getAdStatus(adInfo.adId);
-        const occupied = status.adId ? true : false;
+        console.log(`status ${index}`, status);
+        const occupied = status.adId.toString() !== "0" ? true : false;
         return mapToAdResponse(adInfo, occupied);
       }),
     );
@@ -79,8 +80,12 @@ export const useAdManager = () => {
       /* 일반 구매 */
       if (!occupied) {
         await (
-          await adManager.registerClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
+          await adManager.registerClient(adId, adImageUrl, companyName, adInfo, {
+            value,
+            gasLimit: GAS_LIMIT,
+          })
         ).wait();
+        setIsProcessing(false);
         return;
       }
 
@@ -88,10 +93,10 @@ export const useAdManager = () => {
       await (
         await adManager.registerOverClient(adId, adImageUrl, companyName, adInfo, { value, gasLimit: GAS_LIMIT })
       ).wait();
+      setIsProcessing(false);
+      return;
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -101,8 +106,16 @@ export const useAdManager = () => {
       return;
     }
     const adManager = AdManager__factory.connect(AD_MANAGER_ADDRESS, ethersProvider);
-    const clientInfoResponse = await adManager.getClientInfo(BigNumber.from(0));
-    const clientInfo = clientInfoResponse.map((response) => {
+    const clientInfoResponse = await Promise.all([
+      adManager.getClientInfo(BigNumber.from(0)),
+      adManager.getClientInfo(BigNumber.from(1)),
+      adManager.getClientInfo(BigNumber.from(2)),
+      adManager.getClientInfo(BigNumber.from(3)),
+      adManager.getClientInfo(BigNumber.from(4)),
+    ]);
+
+    const flattenedClientInfoResponse = clientInfoResponse.flat();
+    const clientInfo = flattenedClientInfoResponse.map((response) => {
       return {
         adId: response.adId.toString(),
         approved: false,
@@ -118,6 +131,7 @@ export const useAdManager = () => {
   };
 
   const approveAds = async (adId: string, clientAddress: string) => {
+    console.log("adId", adId, clientAddress);
     const { ethersProvider, signer } = await getAccounts();
     if (!ethersProvider || !signer) {
       throw new Error("Wallet not found");

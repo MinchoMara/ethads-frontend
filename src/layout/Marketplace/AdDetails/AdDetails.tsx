@@ -44,7 +44,7 @@ export const AdDetails = ({
 }: AdDetailsProps) => {
   const { openModal } = useModalContext();
   return (
-    <div className="custom-shadow sticky top-[278px] z-30 flex w-[504px] flex-col items-start gap-5 p-6">
+    <div className="custom-shadow sticky top-[134px] z-30 flex w-[504px] flex-col items-start gap-5 p-6">
       {/* Header */}
       <p className="text-18/heading/s text-gray-950">Details</p>
       {/* Ad Example Image */}

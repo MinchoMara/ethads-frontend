@@ -18,7 +18,7 @@ export interface PurchaseAdModalProps extends UIProps.Div {
 
 export const PurchaseAdModal = ({ adId, occupied, minPrice, ...props }: PurchaseAdModalProps) => {
   const { closeModal } = useModalContext();
-  const { registerClient } = useAdManager();
+  const { isProcessing, registerClient } = useAdManager();
 
   const methods = useForm<PurchaseAdsInput>({
     mode: "onChange",
@@ -43,6 +43,7 @@ export const PurchaseAdModal = ({ adId, occupied, minPrice, ...props }: Purchase
   const onValid = async () => {
     try {
       await registerClient(adId, data, occupied);
+      closeModal();
     } catch (error) {
       console.error(error);
     }
@@ -133,8 +134,8 @@ export const PurchaseAdModal = ({ adId, occupied, minPrice, ...props }: Purchase
                 defaultValue={!occupied ? minPrice : undefined}
               />
             </div>
-            <Button variant="primary" type="submit" className="self-stretch" disabled={!isValid}>
-              Purchase
+            <Button variant="primary" type="submit" className="self-stretch" disabled={!isValid || isProcessing}>
+              {isProcessing ? "Processing..." : "Purchase"}
             </Button>
           </div>
         </form>
